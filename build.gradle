@@ -1,0 +1,62 @@
+plugins {
+    id "architectury-plugin" version "3.4-SNAPSHOT"
+    id "dev.architectury.loom" version "1.5-SNAPSHOT" apply false
+}
+
+architectury {
+    minecraft = minecraft_version
+}
+
+subprojects {
+    apply plugin: "dev.architectury.loom"
+
+    loom {
+        silentMojangMappingsLicense()
+    }
+
+    if (name == "forge") {
+        dependencies {
+            minecraft "com.mojang:minecraft:${forge_minecraft_version}"
+            mappings "net.fabricmc:yarn:${forge_yarn_mappings}:v2"
+        }
+    } else {
+        dependencies {
+            minecraft "com.mojang:minecraft:${minecraft_version}"
+            mappings "net.fabricmc:yarn:${yarn_mappings}:v2"
+        }
+    }
+}
+
+allprojects {
+    apply plugin: "java"
+    apply plugin: "architectury-plugin"
+    apply plugin: "maven-publish"
+
+    base {
+        archivesName = archives_base_name
+    }
+
+    if (name == "forge") {
+        version = "${mod_version}-mc${forge_minecraft_version}-${name}"
+    } else {
+        version = "${mod_version}-mc${minecraft_version}-${name}"
+    }
+
+    group = mod_group
+
+    repositories {
+        maven { url = "https://www.cursemaven.com" }
+        maven { url = "https://api.modrinth.com/maven" }
+        maven { url = "https://maven.neoforged.net/releases/" }
+        maven { url = "https://www.jitpack.io" }
+    }
+
+    tasks.withType(JavaCompile) {
+        options.encoding = "UTF-8"
+        options.release = 17
+    }
+
+    java {
+        withSourcesJar()
+    }
+}
