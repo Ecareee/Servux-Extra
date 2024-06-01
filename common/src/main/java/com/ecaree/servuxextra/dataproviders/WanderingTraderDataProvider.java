@@ -27,12 +27,14 @@ public class WanderingTraderDataProvider extends SimpleDataProvider {
         ServerWorldProperties properties = (ServerWorldProperties) server.getOverworld().getLevelProperties();
         wanderingTraderSpawnDelay = properties.getWanderingTraderSpawnDelay();
         wanderingTraderSpawnChance = properties.getWanderingTraderSpawnChance();
+
         if ((tickCounter % outputInterval) == 0) {
             ServuxExtra.printDebug("WanderingTraderDataProvider#tick:"
                     + " Timer: " + wanderingTraderSpawnTimer
                     + " Delay: " + wanderingTraderSpawnDelay
                     + " Chance: " + wanderingTraderSpawnChance);
         }
+
         if (tickCounter % timeout == 0 && properties.getGameRules().getBoolean(GameRules.DO_TRADER_SPAWNING)) {
             sendData(server);
         }
@@ -40,7 +42,6 @@ public class WanderingTraderDataProvider extends SimpleDataProvider {
 
     @Override
     protected void sendPacket(ServerPlayerEntity player) {
-
         NbtCompound tag = new NbtCompound();
         tag.putInt("wanderingTraderSpawnTimer", wanderingTraderSpawnTimer);
         tag.putInt("wanderingTraderSpawnDelay", wanderingTraderSpawnDelay);

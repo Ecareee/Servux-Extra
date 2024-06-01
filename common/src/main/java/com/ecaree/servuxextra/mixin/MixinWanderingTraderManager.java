@@ -14,7 +14,7 @@ public class MixinWanderingTraderManager {
     @Shadow
     private int spawnTimer;
 
-    // Accessor doesn't seem to work, have to do it this way
+    // Is there a better implementation?
     @Inject(method = "spawn", at = @At("RETURN"))
     private void onSpawn(ServerWorld world, boolean spawnMonsters, boolean spawnAnimals, CallbackInfoReturnable<Integer> cir) {
         WanderingTraderDataProvider.INSTANCE.setWanderingTraderSpawnTimer(spawnTimer);
